@@ -1,0 +1,8 @@
+reviews:
+    css: 'div.review div.a-section.celwidget'
+    multiple: true
+    type: Text
+    children:
+        content:
+            css: 'div.a-row.review-data span.review-text'
+            type: Text
