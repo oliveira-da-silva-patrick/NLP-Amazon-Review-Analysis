@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Review Sentiment Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #b3e6b3;
+            margin: 0;
+            padding: 0;
+        }
+
+        .reviews {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f8f8;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .positive {
+            background-color: green;
+        }
+
+        .neutral {
+            background-color: orange;
+        }
+
+        .negative {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="reviews">
+        <h1>Amazon Review Sentiment Analysis</h1>
+        <h2>Results</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Review</th>
+                    <th>Sentiment</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for review in reviews %}
+                <tr>
+                    <td>{{ review['reviews'] }}</td>
+                    <td class="{{ review['sentiment_type'] }}">{{ review['sentiment_type'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

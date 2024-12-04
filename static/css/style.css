@@ -1,0 +1,40 @@
+body {
+    background-color: #b3e6b3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    padding: 0;
+}
+
+.container {
+    text-align: center;
+}
+
+input[type="url"] {
+    width: 300px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+a {
+    font-family: Arial, sans-serif;
+    text-decoration: none;
+    font-size: 42px;
+    color: red;
+    margin: 20vh 0;
+    padding: 10vh 0;
+    font-weight: bolder;
+}
+

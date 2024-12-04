@@ -1,8 +1,9 @@
-from flask import Flask, request, render_template, jsonify, json
+from flask import Flask, request, render_template, jsonify, json, redirect, url_for
 import selectorlib
 import requests
 import analyze
 import os.path
+from werkzeug.utils import safe_join
 
 app = Flask(__name__)
 extractor = selectorlib.Extractor.from_yaml_file('selectors.yml')
@@ -10,8 +11,8 @@ extractor = selectorlib.Extractor.from_yaml_file('selectors.yml')
 def scrape(url):
     headers = {
         'authority': 'www.amazon.com',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
-
+        'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'}
+    
     r = requests.get(url, headers=headers)
     if r.status_code == 200:
         data = extractor.extract(r.text)
@@ -30,22 +31,43 @@ def scrape_data():
         return jsonify({'error': 'Please provide a valid Amazon URL'}), 400
     
     data = scrape(url)
-    data = [data["reviews"][i]["content"][:-10] for i in range(len(data["reviews"]))]
-    name = url[23:] # remove https://www.amazon.com/
-    name = name.split("/", 1)[0]
-    # print(name)
-    # print(data)
-    analyze.count_vectorize(analyze.preprocess_data(data))
-    # filename = f"data/{name}.json"
-    # if not os.path.isfile(filename):
-    #     analyze.run(data, filename)
-    # data
-    # with open(filename) as json_file:
-    #     data = json.load(json_file)
-    # return jsonify(data)
-    # return render_template("result.html", data = data)
-    return "barikala"
+    reviews = []
     
+    if data.get("reviews"):
+        for review in data["reviews"]:
+            reviews.append({
+                'reviews': review["content"][:-10],
+                'sentiment_type': analyze.get_sentiment(review["content"])
+            })
+            
+    name = url[23:].split("/", 1)[0]
+    filename = f"{name}.json"
+    
+    if reviews:
+        with open(f"data/{filename}", 'w') as f:
+            json.dump(reviews, f)
+            
+    return redirect(url_for('show_reviews', filename=filename))
 
+# # for testing without requesting
+# @app.route('/scrape', methods=['POST'])
+# def scrape_data():
+#     url = request.form.get('url')
+#     name = url[23:].split("/", 1)[0]
+#     filename = f"{name}.json"
+#     return redirect(url_for('show_reviews', filename=filename))
+
+@app.route('/reviews')
+def show_reviews():
+    filename = request.args.get('filename')
+    filepath = safe_join('data', filename)
+    # filepath = "clustered.json"
+    reviews = []
+    if os.path.isfile(filepath):
+        with open(filepath, 'r') as f:
+            reviews = json.load(f)
+    # return render_template('reviews_clustered.html', clusters=reviews)
+    return render_template('reviews_sentiments.html', reviews=reviews)
+    
 if __name__ == '__main__':
     app.run(debug=True)

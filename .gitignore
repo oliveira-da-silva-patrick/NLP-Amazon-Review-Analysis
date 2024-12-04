@@ -1,2 +1,6 @@
-./data
-./__pycache__
+/__pycache__
+clustered.json
+links.txt
+/data
+static/.DS_Store
+static/help_page/.DS_Store

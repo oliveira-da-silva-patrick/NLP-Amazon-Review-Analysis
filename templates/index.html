@@ -4,71 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Amazon Scraper</title>
-    <style>
-        body {
-            background-color: #b3e6b3;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-        .container {
-            text-align: center;
-        }
-        input[type="url"] {
-            width: 300px;
-            padding: 10px;
-            font-size: 16px;
-        }
-        button {
-            padding: 10px 15px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .result {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #ffffff;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="container">
         <h1>Amazon Product Scraper</h1>
-        <form id="scrapeForm">
+        <form action="/scrape" method="POST">
             <input type="url" id="url" name="url" placeholder="Enter Amazon URL" required>
             <button type="submit">Scrape</button>
         </form>
-        <div id="result" class="result" style="display: none;"></div>
+        <a href="{{ url_for('static', filename='help_page/help_page.html') }}" target="_blank">Help</a>
     </div>
-    <script>
-        document.getElementById('scrapeForm').onsubmit = async function(event) {
-            event.preventDefault();
-            const url = document.getElementById('url').value;
-            const resultDiv = document.getElementById('result');
-            resultDiv.style.display = 'none';
-
-            try {
-                const response = await fetch('/scrape', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams({ 'url': url })
-                });
-                const data = await response.json();
-                resultDiv.style.display = 'block';
-                resultDiv.innerText = JSON.stringify(data, null, 2);
-            } catch (error) {
-                resultDiv.style.display = 'block';
-                resultDiv.innerText = 'An error occurred. Please try again.';
-            }
-        };
-    </script>
 </body>
 </html>

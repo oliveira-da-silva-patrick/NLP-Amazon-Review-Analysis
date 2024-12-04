@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon Review Sentiment Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #b3e6b3;
+            margin: 0;
+            padding: 0;
+        }
+
+        .reviews {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f8f8f8;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .positive {
+            background-color: #8CFF9E;
+        }
+
+        .neutral {
+            background-color: #FCBE85;
+        }
+
+        .negative {
+            background-color: #FF7779;
+        }
+
+        .inside {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="reviews">
+        <h1>Amazon Review Analysis</h1>
+        <h2>Results (coloured with sentiment analysed)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Cluster</th>
+                    <th>Review</th>
+                    <th>Keywords</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cluster in clusters %}
+                <tr>
+                    <td>{{ cluster['cluster'] }}</td>
+                    <td>
+                        <table class="inside">
+                            <tbody class="inside">
+                                {% for item in cluster['reviews'] %}
+                                <tr>
+                                    <td class="{{ item['sentiment'] }}">{{ item['review'] }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>{{ cluster['keywords'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
