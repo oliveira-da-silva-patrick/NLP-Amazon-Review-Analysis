@@ -34,11 +34,7 @@ def scrape_data():
     reviews = []
     
     if data.get("reviews"):
-        for review in data["reviews"]:
-            reviews.append({
-                'reviews': review["content"][:-10],
-                'sentiment_type': analyze.get_sentiment(review["content"])
-            })
+        reviews = analyze.analyse(data["reviews"])
             
     name = url[23:].split("/", 1)[0]
     filename = f"{name}.json"
@@ -49,25 +45,15 @@ def scrape_data():
             
     return redirect(url_for('show_reviews', filename=filename))
 
-# # for testing without requesting
-# @app.route('/scrape', methods=['POST'])
-# def scrape_data():
-#     url = request.form.get('url')
-#     name = url[23:].split("/", 1)[0]
-#     filename = f"{name}.json"
-#     return redirect(url_for('show_reviews', filename=filename))
-
 @app.route('/reviews')
 def show_reviews():
     filename = request.args.get('filename')
     filepath = safe_join('data', filename)
-    # filepath = "clustered.json"
     reviews = []
     if os.path.isfile(filepath):
         with open(filepath, 'r') as f:
             reviews = json.load(f)
-    # return render_template('reviews_clustered.html', clusters=reviews)
-    return render_template('reviews_sentiments.html', reviews=reviews)
+    return render_template('reviews_clustered.html', clusters=reviews)
     
 if __name__ == '__main__':
     app.run(debug=True)
