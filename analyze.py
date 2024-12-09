@@ -16,9 +16,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 openai.api_key = ""
 
-nltk.download('punkt')
-nltk.download('stopwords')
-nltk.download('vader_lexicon')
+nltk.download('punkt', force=True)
+nltk.download('stopwords', force=True)
+nltk.download('vader_lexicon', force=True)
 
 def preprocess_text(text):
     if not isinstance(text, str):
